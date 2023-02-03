@@ -1,14 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
-import { useSelector,useDispatch } from 'react-redux';
+import {connect, useSelector,useDispatch } from 'react-redux';
 import { decrement, increment } from './features/counter/counterSlice';
 import SignUp from './components/signUp';
 import Login from './components/Login'
 import Add from './components/Add'
 import { useEffect , useState} from 'react';
-import { getUsers } from './firestore/firestoreReducer';
+//import {getUsers } from './firestore/firestoreReducer';
+import { getUsersAction } from './firestore/firestoreAsyncAction'
 
-function App() {
+function App({isUser}) {
 
 
 
@@ -18,10 +19,12 @@ function App() {
 
 
   useEffect (()=>{
-    const data = dispatch(getUsers());
-    console.log(dispatch(getUsers()));
+    dispatch(getUsersAction())
   }, [])
+
+  
   return (
+    console.log({isUser}),
     <div className="App">
       <div>
         <div>
@@ -47,5 +50,13 @@ function App() {
     </div>
   );
 }
+const stateToProps = (state) => {
+  console.log({state:state
+  });
+  return {
+    isUser: state.firestoreSlice.user,
 
-export default App;
+  };
+};
+export default connect(stateToProps)(App);
+// export default App;
